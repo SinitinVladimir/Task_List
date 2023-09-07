@@ -19,7 +19,5 @@ class Task extends Model
 
     // protected $guarded = ['password'];
 
-    // public function getRouteKeyName() {
-    //     return 'slug';
-    // }
+
 }
