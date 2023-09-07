@@ -17,14 +17,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('task.index');
+    return redirect()->route('tasks.index');
 });
 
 Route::get('/tasks', function () {
     return view('index', [
-        'tasks' => Task::latest()->get() 
+        'tasks' => Task::latest()->paginate(7) 
     ]);
-})->name ('task.index');
+})->name ('tasks.index');
 
 Route::view('tasks/create', 'create')
 ->name('tasks.create');
@@ -72,3 +72,15 @@ Route::put('/tasks/{task}', function (Task $task, TaskRequest $request) {
     return redirect()->route('tasks.show', ['task' => $task->id])
         ->with('success', 'Task updated successfully!');
 })->name('tasks.update');
+
+Route::delete('/tasks/{task}', function (Task $task) {
+    $task->delete();
+
+    return redirect()->route('tasks.index')
+        ->with('success', 'Task deleted successfuly!');
+})->name('tasks.destroy');
+
+Route::put('tasks/{task}/toggle-complete', function(Task $task) {
+    $task->toggleComplete();
+    return redirect()->back()->with('success', 'Task updated successfully!');
+})->name('tasks.toggle-complete');
